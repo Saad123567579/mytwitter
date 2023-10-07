@@ -11,7 +11,7 @@ datasource db {
     // Further reading:
     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-    url      = "mongodb+srv://Saad123:htjpep123@cluster0.azmorz9.mongodb.net/Twitter"
+    url      = env("DATABASE_URL")
 }
 
 model Like{
