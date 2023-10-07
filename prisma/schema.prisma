@@ -1,0 +1,93 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mongodb"
+    // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
+    // Further reading:
+    // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
+    // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
+    url      = "mongodb+srv://Saad123:htjpep123@cluster0.azmorz9.mongodb.net/Twitter"
+}
+
+model Like{
+    likeId     String @id @map("_id")
+    userId     String 
+    tweetId    String
+    user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    tweet      Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+    createdAt  DateTime @default(now())
+}
+
+model Tweet {
+    id           String @id @map("_id")
+    userId       String
+    user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
+    content      String 
+    createdAt    DateTime @default(now())
+    likes        Like[]
+}
+
+model Follow {
+     id           String @id @map("_id")
+     followerId   String
+     followedId   String
+     follower     User @relation(name: "Followers", fields: [followerId], references: [id], onDelete: Cascade)
+     followed     User @relation(name: "Following", fields: [followedId], references: [id], onDelete: Cascade)
+}
+
+
+
+// Necessary for Next auth
+model Account {
+    id                String  @id  @map("_id")
+    userId            String
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? // @db.Text
+    access_token      String? // @db.Text
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String? // @db.Text
+    session_state     String?
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+   
+    @@unique([provider, providerAccountId])
+}
+
+model Session {
+    id           String   @id  @map("_id")
+    sessionToken String   @unique
+    userId       String
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+    id            String    @id  @map("_id")
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
+    accounts      Account[]
+    sessions      Session[]
+    tweets        Tweet[]
+    likes         Like[]
+    following     Follow[] @relation("Following")
+    followers     Follow[] @relation("Followers")
+
+}
+
+model VerificationToken {
+    identifier String   @id  @map("_id")
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
+}
