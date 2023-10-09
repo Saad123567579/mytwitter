@@ -8,7 +8,7 @@ export const postRouter = router({
             }),
         )
         .mutation((opts) => {
-            console.log(opts);
+            console.log(opts.input);
             return;
             // [...]
         }),
