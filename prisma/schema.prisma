@@ -14,80 +14,58 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Like{
-    likeId     String @id @map("_id")
-    userId     String 
-    tweetId    String
-    user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    tweet      Tweet @relation(fields: [tweetId], references: [id], onDelete: Cascade)
-    createdAt  DateTime @default(now())
-}
-
-model Tweet {
-    id           String @id @map("_id")
-    userId       String
-    user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
-    content      String 
-    createdAt    DateTime @default(now())
-    likes        Like[]
-}
-
-model Follow {
-     id           String @id @map("_id")
-     followerId   String
-     followedId   String
-     follower     User @relation(name: "Followers", fields: [followerId], references: [id], onDelete: Cascade)
-     followed     User @relation(name: "Following", fields: [followedId], references: [id], onDelete: Cascade)
-}
-
-
-
-// Necessary for Next auth
-model Account {
-    id                String  @id  @map("_id")
-    userId            String
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? // @db.Text
-    access_token      String? // @db.Text
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? // @db.Text
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-   
-    @@unique([provider, providerAccountId])
-}
-
-model Session {
-    id           String   @id  @map("_id")
-    sessionToken String   @unique
-    userId       String
-    expires      DateTime
-    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
 model User {
-    id            String    @id  @map("_id")
-    name          String?
-    email         String?   @unique
-    emailVerified DateTime?
-    image         String?
-    accounts      Account[]
-    sessions      Session[]
-    tweets        Tweet[]
-    likes         Like[]
-    following     Follow[] @relation("Following")
-    followers     Follow[] @relation("Followers")
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  name            String?
+  username        String?   @unique
+  bio             String?
+  email           String?   @unique
+  emailVerified   DateTime?
+  image           String?
+  coverImage      String?
+  profileImage    String?
+  hashedPassword  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  followingIds    String[] @db.ObjectId
+  hasNotification Boolean?
 
+  posts         Post[]
+  comments      Comment[]
+  notifications Notification[]
 }
 
-model VerificationToken {
-    identifier String   @id  @map("_id")
-    token      String   @unique
-    expires    DateTime
+model Post {
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  body               String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  userId             String @db.ObjectId
+  likedIds           String[] @db.ObjectId
+  image              String?
 
-    @@unique([identifier, token])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  comments          Comment[]
+}
+
+model Comment {
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  body               String
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  userId             String @db.ObjectId
+  postId             String @db.ObjectId
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id                 String @id @default(auto()) @map("_id") @db.ObjectId
+  body               String
+  userId             String @db.ObjectId
+  createdAt          DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
