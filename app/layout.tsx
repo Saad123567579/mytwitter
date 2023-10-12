@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ['latin'] })
 import { Provider as ReduxProvider } from 'react-redux';
 import { store } from '@/lib/redux/store';
 
-
+//comeny
 export default function RootLayout({
   children,
 }: {
