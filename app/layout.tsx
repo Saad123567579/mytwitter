@@ -1,13 +1,11 @@
+"use client"
 import './globals.css'
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Provider from './_trpc/Provider'
 const inter = Inter({ subsets: ['latin'] })
+import { Provider as ReduxProvider } from 'react-redux';
+import { store } from '@/lib/redux/store';
 
-export const metadata: Metadata = {
-  title: 'Twitter',
-  description: 'A twitter clone using the t3 stack ',
-}
 
 export default function RootLayout({
   children,
@@ -15,10 +13,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+   <ReduxProvider store={store}>
+     <html lang="en">
       <body className={inter.className}>
         <Provider>{children}</Provider>
       </body>
     </html>
+   </ReduxProvider>
   )
 }
