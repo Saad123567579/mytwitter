@@ -1,4 +1,5 @@
-'use client'
+// 'use client'
+
 import { createSlice,createAsyncThunk } from '@reduxjs/toolkit';
 
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'

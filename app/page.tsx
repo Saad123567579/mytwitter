@@ -5,7 +5,7 @@ import Image from 'next/image'
 
 import Sidebar from './_components/Sidebar';
 export default async function Home() {
-  const getTodos = await serverClient.post.create({title:"Saad"});
+  // const getTodos = await serverClient.post.create({title:"Saad"});
 
   
   return (
