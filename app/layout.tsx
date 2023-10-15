@@ -5,8 +5,9 @@ import Provider from './_trpc/Provider'
 const inter = Inter({ subsets: ['latin'] })
 import { Provider as ReduxProvider } from 'react-redux';
 import { store } from '@/lib/redux/store';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-//comeny
 export default function RootLayout({
   children,
 }: {
@@ -16,7 +17,7 @@ export default function RootLayout({
    <ReduxProvider store={store}>
      <html lang="en">
       <body className={inter.className}>
-        <Provider>{children}</Provider>
+        <Provider>{children}<ToastContainer /></Provider>
       </body>
     </html>
    </ReduxProvider>

@@ -10,7 +10,7 @@ export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
 interface State { 
-    currentUser: null | object ,
+    currentUser: null | {id:string,name:string,email:string,image:string,createdAt:string} ,
     
 }
 

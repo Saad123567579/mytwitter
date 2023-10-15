@@ -1,2 +1,6 @@
 import { PrismaClient } from "@prisma/client";
-export const client = () => new PrismaClient()
+
+// Create a new instance of the PrismaClient
+export const prisma = new PrismaClient();
+
+// Export the PrismaClient instance directly

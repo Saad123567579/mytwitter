@@ -1,5 +1,6 @@
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
+import { prisma } from '@/prisma/prismaClient';
 
 export const userRouter = router({
     createUser: publicProcedure
@@ -11,9 +12,34 @@ export const userRouter = router({
                 name: z.union([z.string(), z.nullable(z.string())]),
             }),
         )
-        .mutation((opts) => {
-            console.log(opts.input);
-            return;
-            // [...]
+        
+        .mutation(async (opts) => {
+            const{id,image,name,email} = opts.input;
+            if (id && image && name && email) {
+                const checkUser = await prisma.user.findUnique({
+                    where: { email: email },
+                });
+                if (!checkUser) {
+                    const createUser = await prisma.user.create({
+                        data: {
+                            name:name,
+                            email:email,
+                            image:image
+                        }, 
+                    });
+
+                    if(createUser){ 
+                        return {status:"success",payload:createUser,msg:"User Successfully Created"}
+                        
+                    }
+                }
+                
+                return {status:"success",payload:checkUser,msg:"Welcome back"}
+
+            }
+           
+            return {status:"failure",payload:{},msg:"Internal Server Error"}
+
         }),
 });
+

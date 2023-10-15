@@ -9,10 +9,14 @@ import { GoogleAuthProvider } from 'firebase/auth';
 import { signInWithPopup } from 'firebase/auth';
 import { firebaseAuth } from '../../lib/firebase';
 import { trpc } from '../_trpc/client';
-import { appRouter } from '../server/router/_app';
+import {toast} from "react-toastify"
+import {useRouter} from 'next/navigation';
+import { useAppSelector } from '@/lib/redux/types';
 const Sidebar = () => {
+  const router = useRouter();
   const provider = new GoogleAuthProvider();
   const userCreator = trpc.user.createUser.useMutation();
+  const user = useAppSelector((state)=>state?.user?.currentUser)
 
   const handleLogin = async () => {
     console.log("clicked");
@@ -24,11 +28,28 @@ const Sidebar = () => {
         image: user.photoURL,
         name: user.displayName,
       };
-      userCreator.mutate(obj);
+      
+      const res = await userCreator.mutateAsync(obj);
+      if(res.status=="failure"){
+        toast.error(res.msg)
+      }
+      if(res.status=="success"){
+        toast.success(res.msg)
+        localStorage.setItem("user",JSON.stringify(res.payload))
+        setTimeout(()=>{window.location.href="/"},1000)
+      }
+      
 
       console.log(obj);
     } catch (e) {
       console.log("An error has occurred ", e);
+    }
+  }
+
+  const handleLogout = async() => {
+    if(localStorage.getItem('user')){
+      localStorage.removeItem("user");
+      window.location.href="/"
     }
   }
 
@@ -52,12 +73,24 @@ const Sidebar = () => {
       </div>
       <div className='flex p-2 cursor-pointer hover:bg-neutral-900 rounded-lg mb-2'>
         <LuLogOut className="text-2xl " />
-        <h1 className='font-bold ml-2 text-2xl' onClick={handleLogin}>Login</h1>
+        {user?
+        ( <h1 className='font-bold ml-2 text-2xl' onClick={handleLogout}>Logout</h1>)
+        :
+        ( <h1 className='font-bold ml-2 text-2xl' onClick={handleLogin}>Login</h1>)
+        }
+       
       </div>
       <button className='p-2 bg-twitter-blue hover:bg-blue-400 mr-2 rounded-l-full rounded-r-full font-semibold w-6/8'>Tweet</button>
-
-      <button className='p-2 bg-twitter-blue hover:bg-blue-400 mr-2 mt-2 mb-8 rounded-l-full rounded-r-full font-semibold w-6/8'>Login
-      </button>
+      {user?(
+        <button className='p-2 bg-twitter-blue hover:bg-blue-400 mr-2 mt-2 mb-8 rounded-l-full rounded-r-full font-semibold w-6/8'>
+       Welcome {user?.name}
+       </button>
+      ):(
+<button className='p-2 bg-twitter-blue hover:bg-blue-400 mr-2 mt-2 mb-8 rounded-l-full rounded-r-full font-semibold w-6/8'>
+       Please Login
+       </button>
+      )}
+      
 
     </div>
   )
