@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { serverClient } from './_trpc/serverClient';
 import Image from 'next/image'
-// import { trpc } from './_trpc/client'
+// import { trpc } from './_trpc/client'//
 import { setCurrentUser } from '@/lib/redux/userSlice';
 import { useDispatch } from 'react-redux';
 import Sidebar from './_components/Sidebar';
