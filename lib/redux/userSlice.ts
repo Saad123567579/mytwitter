@@ -1,4 +1,3 @@
-'use client'
 
 import { createSlice,createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -10,9 +9,9 @@ export const useAppDispatch: () => AppDispatch = useDispatch
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
 interface State { 
-    currentUser: null | {id:string,name:string,email:string,image:string,createdAt:string} ,
+    currentUser: null | {id:string,name:string,email:string,image:string,createdAt:string,followingIds:string[],followedIds:string[]} ,
     currentPage:string 
-    currentProfile:null | {id:string,name:string,email:string,image:string,createdAt:string} 
+    currentProfile:null | {id:string,name:string,email:string,image:string,createdAt:string,followingIds:string[],followedIds:string[]} 
     
 }
 

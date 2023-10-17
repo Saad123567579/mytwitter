@@ -1,4 +1,3 @@
-'use client'
 import React from 'react'
 import { BsTwitter } from "react-icons/bs";
 import { IoIosNotifications } from "react-icons/io";
@@ -60,9 +59,10 @@ const Sidebar = () => {
     await dispatch(setCurrentProfile(null));
   }
   const handleProfile = async() => {
-    if(!user) return;
-    await dispatch(setCurrentPage("profile"));
-    await dispatch(setCurrentProfile(user));
+      if(user) {
+        await dispatch(setCurrentPage("profile"));
+        await dispatch(setCurrentProfile(user));
+      }
   }
 
   return (

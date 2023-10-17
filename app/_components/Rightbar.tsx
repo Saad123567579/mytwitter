@@ -1,5 +1,3 @@
-"use client"
-import { useEffect } from 'react'
 import React from 'react'
 import {setCurrentPage,setCurrentProfile} from "@/lib/redux/userSlice"
 import { useAppSelector } from '@/lib/redux/userSlice'
