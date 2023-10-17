@@ -6,7 +6,12 @@ import Image from 'next/image'
 import { setCurrentUser } from '@/lib/redux/userSlice';
 import { useDispatch } from 'react-redux';
 import Sidebar from './_components/Sidebar';
+import Rightbar from './_components/Rightbar';
+
+import { useAppSelector } from '@/lib/redux/userSlice';
 export default async function Home() {
+  const page = useAppSelector((state)=>state?.user?.currentPage)
+
   const dispatch = useDispatch();
   useEffect(() => {
     const getUser = async()=> {
@@ -29,7 +34,12 @@ export default async function Home() {
     <div className='h-full w-1/5  '>
       <Sidebar/>
     </div>
-    <div className='h-full w-4/5 '>s</div>
+    <div className='h-full w-3/5 '>
+      {/* {page==="home" && <Hom/>}
+      {page==="profile" && <Profile/>} */}
+    </div>
+    <div className='h-full w-1/5 border-l-2 b-1'><Rightbar/></div>
+
     </div >
 
   )

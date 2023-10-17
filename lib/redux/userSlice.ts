@@ -1,4 +1,4 @@
-// 'use client'
+'use client'
 
 import { createSlice,createAsyncThunk } from '@reduxjs/toolkit';
 
@@ -11,18 +11,18 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 
 interface State { 
     currentUser: null | {id:string,name:string,email:string,image:string,createdAt:string} ,
+    currentPage:string 
+    currentProfile:null | {id:string,name:string,email:string,image:string,createdAt:string} 
     
 }
 
 const initialState : State = {
     currentUser:null,
+    currentPage:"home",
+    currentProfile:null
     
 
 };
-
-
-
-
 
 
 export const userSlice = createSlice({
@@ -35,18 +35,21 @@ export const userSlice = createSlice({
             
             state.currentUser = action.payload
         },
+        setCurrentPage:(state,action) => {
+            
+            state.currentPage = action.payload
+        },
+        setCurrentProfile:(state,action) => {
+            
+            state.currentProfile = action.payload
+        },
+
         
     },
     extraReducers: (builder) => {
-        builder
-           
-           
-            
+        builder        
     },
-    
-
-
 });
 
-export const { setCurrentUser} = userSlice.actions;
+export const { setCurrentUser,setCurrentPage,setCurrentProfile} = userSlice.actions;
 export default userSlice.reducer;

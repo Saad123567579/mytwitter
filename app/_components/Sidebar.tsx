@@ -12,8 +12,11 @@ import { trpc } from '../_trpc/client';
 import {toast} from "react-toastify"
 import {useRouter} from 'next/navigation';
 import { useAppSelector } from '@/lib/redux/types';
+import {setCurrentPage,setCurrentProfile} from "@/lib/redux/userSlice"
+import { useDispatch } from 'react-redux'
 const Sidebar = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
   const provider = new GoogleAuthProvider();
   const userCreator = trpc.user.createUser.useMutation();
   const user = useAppSelector((state)=>state?.user?.currentUser)
@@ -52,6 +55,15 @@ const Sidebar = () => {
       window.location.href="/"
     }
   }
+  const handleHome = async() => {
+    await dispatch(setCurrentPage("home"));
+    await dispatch(setCurrentProfile(null));
+  }
+  const handleProfile = async() => {
+    if(!user) return;
+    await dispatch(setCurrentPage("profile"));
+    await dispatch(setCurrentProfile(user));
+  }
 
   return (
     <div className='w-full h-full flex flex-col justify-start m-2 text-white border-r-2'>
@@ -59,7 +71,7 @@ const Sidebar = () => {
         <BsTwitter className="text-2xl " />
         <h1 className='font-bold ml-2 text-2xl'>Twitter</h1>
       </div>
-      <div className='flex p-2 cursor-pointer hover:bg-neutral-900 rounded-lg mb-2'>
+      <div className='flex p-2 cursor-pointer hover:bg-neutral-900 rounded-lg mb-2' onClick={handleHome}>
         <AiFillHome className="text-2xl " />
         <h1 className='font-bold ml-2 text-2xl'>Home</h1>
       </div>
@@ -67,7 +79,7 @@ const Sidebar = () => {
         <IoIosNotifications className="text-2xl " />
         <h1 className='font-bold ml-2 text-2xl'>Notification</h1>
       </div>
-      <div className='flex p-2 cursor-pointer hover:bg-neutral-900 rounded-lg mb-2'>
+      <div className='flex p-2 cursor-pointer hover:bg-neutral-900 rounded-lg mb-2' onClick={handleProfile}>
         <CgProfile className="text-2xl " />
         <h1 className='font-bold ml-2 text-2xl'>Profile</h1>
       </div>
