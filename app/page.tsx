@@ -9,6 +9,7 @@ import Sidebar from './_components/Sidebar';
 import Rightbar from './_components/Rightbar';
 import Hom from './_components/Home';
 import Profile from './_components/Profile';
+import Tweet from './_components/Tweet';
 import { useAppSelector } from '@/lib/redux/userSlice';
 export default function Home() {
   const page = useAppSelector((state)=>state?.user?.currentPage)
@@ -38,6 +39,8 @@ export default function Home() {
     <div className='h-full w-3/5 '>
       {page==="home" && <Hom/>}
       {page==="profile" && <Profile/>}
+      {page==="tweet" && <Tweet/>}
+
     </div>
     <div className='h-full w-1/5 border-l-2 b-1'><Rightbar/></div>
 

@@ -12,7 +12,6 @@ export const userRouter = router({
                 name: z.union([z.string(), z.nullable(z.string())]),
             }),
         )
-        
         .mutation(async (opts) => {
             const{id,image,name,email} = opts.input;
             if (id && image && name && email) {
@@ -27,17 +26,12 @@ export const userRouter = router({
                             image:image
                         }, 
                     });
-
                     if(createUser){ 
                         return {status:"success",payload:createUser,msg:"User Successfully Created"}
-                        
                     }
                 }
-                
                 return {status:"success",payload:checkUser,msg:"Welcome back"}
-
             }
-           
             return {status:"failure",payload:{},msg:"Internal Server Error"}
 
         }),

@@ -1,19 +1,29 @@
 import { router, publicProcedure } from '../trpc';
 import { z } from 'zod';
+import { prisma } from '@/prisma/prismaClient';
+
 export const postRouter = router({
-    create: publicProcedure
+    createPost: publicProcedure
         .input(
             z.object({
-                title: z.string(),
+                image:z.string(),
+                body:z.string(),
+                userId:z.string()
             }),
         )
-        .mutation((opts) => {
+        .mutation(async(opts) => {
             console.log(opts.input);
-            return;
-            // [...]
+            const {image,body,userId} = opts.input
+            const createPost = await prisma.post.create({
+                data: {
+                   image,body,userId
+                }, 
+            });
+            if(createPost){ 
+                return {status:"success",payload:createPost,msg:"Post Successfully Created"}
+            }
+            return {status:"failure",payload:{},msg:"Internal Server Error"}
+
         }),
-    list: publicProcedure.query(() => {
-        // ...
-        return [];
-    }),
+   
 });

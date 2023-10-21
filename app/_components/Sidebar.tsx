@@ -65,8 +65,15 @@ const Sidebar = () => {
       }
   }
 
+  const handleTweet = async() => {
+  if(user){
+    await dispatch(setCurrentPage("tweet"));
+    await dispatch(setCurrentProfile(user));
+  }  
+  }
+
   return (
-    <div className='w-full h-full flex flex-col justify-start m-2 text-white border-r-2'>
+    <div className='w-full h-full flex flex-col justify-start m-2 text-white '>
       <div className='flex p-2 cursor-pointer hover:bg-neutral-900 rounded-lg mb-2'>
         <BsTwitter className="text-2xl " />
         <h1 className='font-bold ml-2 text-2xl'>Twitter</h1>
@@ -92,7 +99,7 @@ const Sidebar = () => {
         }
        
       </div>
-      <button className='p-2 bg-twitter-blue hover:bg-blue-400 mr-2 rounded-l-full rounded-r-full font-semibold w-6/8'>Tweet</button>
+      <button className='p-2 bg-twitter-blue hover:bg-blue-400 mr-2 rounded-l-full rounded-r-full font-semibold w-6/8' onClick={handleTweet}>Tweet</button>
       {user?(
         <button className='p-2 bg-twitter-blue hover:bg-blue-400 mr-2 mt-2 mb-8 rounded-l-full rounded-r-full font-semibold w-6/8'>
        Welcome {user?.name}
