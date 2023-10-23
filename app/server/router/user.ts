@@ -13,7 +13,7 @@ export const userRouter = router({
             }),
         )
         .mutation(async (opts) => {
-            const{id,image,name,email} = opts.input;
+            const { id, image, name, email } = opts.input;
             if (id && image && name && email) {
                 const checkUser = await prisma.user.findUnique({
                     where: { email: email },
@@ -21,19 +21,30 @@ export const userRouter = router({
                 if (!checkUser) {
                     const createUser = await prisma.user.create({
                         data: {
-                            name:name,
-                            email:email,
-                            image:image
-                        }, 
+                            name: name,
+                            email: email,
+                            image: image
+                        },
                     });
-                    if(createUser){ 
-                        return {status:"success",payload:createUser,msg:"User Successfully Created"}
+                    if (createUser) {
+                        return { status: "success", payload: createUser, msg: "User Successfully Created" }
                     }
                 }
-                return {status:"success",payload:checkUser,msg:"Welcome back"}
+                return { status: "success", payload: checkUser, msg: "Welcome back" }
             }
-            return {status:"failure",payload:{},msg:"Internal Server Error"}
+            return { status: "failure", payload: {}, msg: "Internal Server Error" }
 
         }),
+    getUserById: publicProcedure
+        .input(z.string())
+        .mutation(async (opts) => {
+            let id = opts.input;
+            let user = await prisma.user.findUnique({ where: { id } })
+            if (user) {
+                return { status: "success", payload: user }
+            }
+            return { status: "failure", payload: {} }
+
+        })
 });
 

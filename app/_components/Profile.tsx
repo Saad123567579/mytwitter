@@ -3,9 +3,7 @@ import { useAppSelector } from '@/lib/redux/userSlice'
 import { setCurrentPage,setCurrentProfile } from '@/lib/redux/userSlice';
 import {BiArrowBack} from "react-icons/bi";
 import { useDispatch } from 'react-redux';
-//comment
-//another
-//comment added
+
 const Profile = () => {
     const dispatch = useDispatch();
     const currentProfile = useAppSelector((state)=>state?.user?.currentProfile);
